@@ -1,110 +1,66 @@
 package com.agenda.util;
 
-import com.agenda.modelo.Contacto;
+import com.agenda.excepciones.DatosInvalidosException;
+import com.agenda.excepciones.ExcepcionAgenda;
 
 public class ValidadorContacto {
-    private Contacto[] contactos;
-    private int numeroContactos;
-    private static final int TAMANIO_POR_DEFECTO = 10;
+    private static final int MIN_LONGITUD_NOMBRE = 2;
+    private static final int MAX_LONGITUD_NOMBRE = 50;
+    private static final int LONGITUD_TELEFONO = 10;
 
     /**
-     * Constructor con tamaño personalizado
+     * Valida el nombre del contacto
      */
-    public Agenda(int tamanio) {
-        if (tamanio <= 0) {
-            tamanio = TAMANIO_POR_DEFECTO;
+    public static void validarNombre(String nombre) throws DatosInvalidosException {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new DatosInvalidosException("El nombre no puede estar vacío");
         }
-        this.contactos = new Contacto[tamanio];
-        this.numeroContactos = 0;
+
+        String nombreLimpio = nombre.trim();
+
+        if (nombreLimpio.length() < MIN_LONGITUD_NOMBRE) {
+            throw new DatosInvalidosException("El nombre debe tener al menos " + MIN_LONGITUD_NOMBRE + " caracteres");
+        }
+
+        if (nombreLimpio.length() > MAX_LONGITUD_NOMBRE) {
+            throw new DatosInvalidosException("El nombre no puede tener más de " + MAX_LONGITUD_NOMBRE + " caracteres");
+        }
+
+        if (!nombreLimpio.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+            throw new DatosInvalidosException("El nombre solo puede contener letras y espacios");
+        }
     }
 
     /**
-     * Constructor con tamaño por defecto (10)
+     * Valida el teléfono del contacto
      */
-    public Agenda() {
-        this(TAMANIO_POR_DEFECTO);
+    public static void validarTelefono(String telefono) throws DatosInvalidosException {
+        if (telefono == null || telefono.trim().isEmpty()) {
+            throw new DatosInvalidosException("El teléfono no puede estar vacío");
+        }
+
+        String telefonoLimpio = telefono.replaceAll("[\\s-]", "");
+
+        if (!telefonoLimpio.matches("^[0-9]+$")) {
+            throw new DatosInvalidosException("El teléfono solo puede contener números");
+        }
+
+        if (telefonoLimpio.length() != LONGITUD_TELEFONO) {
+            throw new DatosInvalidosException("El teléfono debe tener exactamente " + LONGITUD_TELEFONO + " dígitos");
+        }
     }
 
     /**
-     * Añade un contacto a la agenda
+     * Normaliza el nombre (trim y capitalización)
      */
-    public void anadirContacto(Contacto contacto) throws ExcepcionAgenda {
-        // Validar datos
-        ValidadorContacto.validarNombre(contacto.getNombre());
-        ValidadorContacto.validarTelefono(contacto.getTelefono());
-
-        // Normalizar datos
-        contacto.setNombre(ValidadorContacto.normalizarNombre(contacto.getNombre()));
-        contacto.setTelefono(ValidadorContacto.normalizarTelefono(contacto.getTelefono()));
-
-        // Verificar si está llena
-        if (agendaLlena()) {
-            throw new AgendaLlenaException();
-        }
-
-        // Verificar si ya existe
-        if (existeContacto(contacto)) {
-            throw new ContactoDuplicadoException(contacto.getNombre());
-        }
-
-        // Añadir contacto
-        contactos[numeroContactos] = contacto;
-        numeroContactos++;
+    public static String normalizarNombre(String nombre) {
+        return nombre.trim();
     }
 
     /**
-     * Verifica si existe un contacto
+     * Normaliza el teléfono (elimina espacios y guiones)
      */
-    public boolean existeContacto(Contacto contacto) {
-        for (int i = 0; i < numeroContactos; i++) {
-            if (contactos[i].equals(contacto)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Verifica si la agenda está llena
-     */
-    public boolean agendaLlena() {
-        return numeroContactos >= contactos.length;
-    }
-
-    /**
-     * Retorna el número de huecos libres
-     */
-    public int huecosLibres() {
-        return contactos.length - numeroContactos;
-    }
-
-    public void listarContactos() {
-        if (numeroContactos == 0) {
-            System.out.println("\n📭 La agenda está vacía");
-            return;
-        }
-
-        System.out.println("\n" + "=".repeat(50));
-        System.out.println("📖 LISTA DE CONTACTOS (" + numeroContactos + "/" + contactos.length + ")");
-        System.out.println("=".repeat(50));
-        System.out.printf("%-20s | %s%n", "NOMBRE", "TELÉFONO");
-        System.out.println("-".repeat(50));
-
-        for (int i = 0; i < numeroContactos; i++) {
-            System.out.println((i + 1) + ". " + contactos[i]);
-        }
-        System.out.println("=".repeat(50));
-    }
-
-    /**
-     * Busca un contacto por nombre
-     */
-    public Contacto buscarContacto(String nombre) throws ContactoNoEncontradoException {
-        for (int i = 0; i < numeroContactos; i++) {
-            if (contactos[i].getNombre().equalsIgnoreCase(nombre.trim())) {
-                return contactos[i];
-            }
-        }
-        throw new ContactoNoEncontradoException(nombre);
+    public static String normalizarTelefono(String telefono) {
+        return telefono.replaceAll("[\\s-]", "");
     }
 }
