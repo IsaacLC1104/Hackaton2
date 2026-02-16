@@ -4,6 +4,6 @@ public class ContactoDuplicadoException extends ExcepcionAgenda {
 
 
     public ContactoDuplicadoException(String nombre) {
-        super("❌ Error: El contacto '" + nombre + "' ya existe");
+        super(" Error: El contacto '" + nombre + "' ya existe");
     }
 }
