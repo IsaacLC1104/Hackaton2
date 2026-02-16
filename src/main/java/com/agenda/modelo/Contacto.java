@@ -1,42 +1,49 @@
 package com.agenda.modelo;
 
+import java.util.Objects;
+
 public class Contacto {
-    public void eliminarContacto(String nombre) throws ContactoNoEncontradoException {
-        int indice = -1;
 
-        // Buscar el índice del contacto
-        for (int i = 0; i < numeroContactos; i++) {
-            if (contactos[i].getNombre().equalsIgnoreCase(nombre.trim())) {
-                indice = i;
-                break;
-            }
-        }
+    private String nombre;
+    private String telefono;
 
-        if (indice == -1) {
-            throw new ContactoNoEncontradoException(nombre);
-        }
-
-        // Desplazar elementos hacia la izquierda
-        for (int i = indice; i < numeroContactos - 1; i++) {
-            contactos[i] = contactos[i + 1];
-        }
-
-        contactos[numeroContactos - 1] = null;
-        numeroContactos--;
+    public Contacto(String nombre, String telefono) {
+        this.nombre = nombre;
+        this.telefono = telefono;
     }
 
-    /**
-     * Retorna el número de contactos actual
-     */
-    public int getNumeroContactos() {
-        return numeroContactos;
+    public String getNombre() {
+        return nombre;
     }
 
-    /**
-     * Retorna la capacidad total
-     */
-    public int getCapacidadTotal() {
-        return contactos.length;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Contacto contacto = (Contacto) obj;
+        return nombre.equalsIgnoreCase(contacto.nombre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombre.toLowerCase());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%-20s | %s", nombre, telefono);
     }
 
 }
