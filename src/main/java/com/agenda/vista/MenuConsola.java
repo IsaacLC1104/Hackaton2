@@ -22,24 +22,24 @@ public class MenuConsola {
      */
     private void solicitarTamanioAgenda() {
         System.out.println("\n╔════════════════════════════════════════╗");
-        System.out.println("║        AGENDA DE CONTACTOS - JAVA      ║");
+        System.out.println("║    📒 AGENDA DE CONTACTOS - JAVA      ║");
         System.out.println("╚════════════════════════════════════════╝");
-        System.out.print("\n¿Desea crear agenda con tamaño personalizado? (S/N): ");
+        System.out.print("\nDesea crear agenda con tamano personalizado? (S/N): ");
         String respuesta = scanner.nextLine().trim().toUpperCase();
 
         if (respuesta.equals("S")) {
-            System.out.print("Ingrese el tamaño de la agenda: ");
+            System.out.print("Ingrese el tamano de la agenda: ");
             try {
                 int tamanio = Integer.parseInt(scanner.nextLine().trim());
                 this.agenda = new Agenda(tamanio);
-                System.out.println("Agenda creada con capacidad para " + tamanio + " contactos");
+                System.out.println("✅ Agenda creada con capacidad para " + tamanio + " contactos");
             } catch (NumberFormatException e) {
-                System.out.println("Tamaño inválido. Se usará tamaño por defecto (10)");
+                System.out.println("⚠️ Tamano invalido. Se usara tamano por defecto (10)");
                 this.agenda = new Agenda();
             }
         } else {
             this.agenda = new Agenda();
-            System.out.println("Agenda creada con tamaño por defecto (10 contactos)");
+            System.out.println("✅ Agenda creada con tamano por defecto (10 contactos)");
         }
     }
 
@@ -50,14 +50,14 @@ public class MenuConsola {
         int opcion;
         do {
             System.out.println("\n╔════════════════════════════════════════╗");
-            System.out.println("║           MENU PRINCIPAL               ║");
+            System.out.println("║           MENU PRINCIPAL              ║");
             System.out.println("╠════════════════════════════════════════╣");
-            System.out.println("║ 1.  Agregar contacto                   ║");
-            System.out.println("║ 2.  Listar todos los contactos         ║");
-            System.out.println("║ 3.  Buscar contacto                    ║");
-            System.out.println("║ 4.  Eliminar contacto                  ║");
-            System.out.println("║ 5.  Ver espacios disponibles           ║");
-            System.out.println("║ 6.  Salir                              ║");
+            System.out.println("║ 1.  Anadir contacto                 ║");
+            System.out.println("║ 2.  Listar todos los contactos      ║");
+            System.out.println("║ 3.  Buscar contacto                 ║");
+            System.out.println("║ 4.    Eliminar contacto              ║");
+            System.out.println("║ 5.    Ver espacios disponibles        ║");
+            System.out.println("║ 6.     Salir                           ║");
             System.out.println("╚════════════════════════════════════════╝");
             System.out.print("\nSeleccione una opcion: ");
 
@@ -92,7 +92,7 @@ public class MenuConsola {
                 mostrarEspaciosDisponibles();
                 break;
             case 6:
-                System.out.println("\n ¡Hasta luego! Agenda cerrada.");
+                System.out.println("\n👋 Hasta luego! Agenda cerrada.");
                 break;
             default:
                 System.out.println("\n Opcion invalida. Intente nuevamente.");
@@ -104,20 +104,20 @@ public class MenuConsola {
      */
     private void anadirContacto() {
         System.out.println("\n" + "=".repeat(50));
-        System.out.println("➕ AGREGAR NUEVO CONTACTO");
+        System.out.println("➕ ANADIR NUEVO CONTACTO");
         System.out.println("=".repeat(50));
 
         System.out.print("Nombre: ");
         String nombre = scanner.nextLine();
 
-        System.out.print("Teléfono (10 dígitos): ");
+        System.out.print("Telefono (10 dígitos): ");
         String telefono = scanner.nextLine();
 
         try {
             Contacto nuevoContacto = new Contacto(nombre, telefono);
             agenda.anadirContacto(nuevoContacto);
-            System.out.println("\n Contacto agregado exitosamente");
-            System.out.println(" Espacios libres: " + agenda.huecosLibres());
+            System.out.println("\n Contacto anadido exitosamente");
+            System.out.println("📊 Espacios libres: " + agenda.huecosLibres());
         } catch (ExcepcionAgenda e) {
             System.out.println("\n" + e.getMessage());
         }
@@ -128,7 +128,7 @@ public class MenuConsola {
      */
     private void buscarContacto() {
         System.out.println("\n" + "=".repeat(50));
-        System.out.println(" BUSCAR CONTACTO");
+        System.out.println("BUSCAR CONTACTO");
         System.out.println("=".repeat(50));
 
         System.out.print("Ingrese el nombre a buscar: ");
@@ -136,7 +136,7 @@ public class MenuConsola {
 
         try {
             Contacto encontrado = agenda.buscarContacto(nombre);
-            System.out.println("\n Contacto encontrado:");
+            System.out.println("\nContacto encontrado:");
             System.out.println("━".repeat(50));
             System.out.printf("%-20s | %s%n", "NOMBRE", "TELEFONO");
             System.out.println("━".repeat(50));
@@ -152,7 +152,7 @@ public class MenuConsola {
      */
     private void eliminarContacto() {
         System.out.println("\n" + "=".repeat(50));
-        System.out.println("  ELIMINAR CONTACTO");
+        System.out.println("ELIMINAR CONTACTO");
         System.out.println("=".repeat(50));
 
         System.out.print("Ingrese el nombre del contacto a eliminar: ");
@@ -160,8 +160,8 @@ public class MenuConsola {
 
         try {
             agenda.eliminarContacto(nombre);
-            System.out.println("\n Contacto eliminado exitosamente");
-            System.out.println(" Espacios libres: " + agenda.huecosLibres());
+            System.out.println("\nContacto eliminado exitosamente");
+            System.out.println("Espacios libres: " + agenda.huecosLibres());
         } catch (ContactoNoEncontradoException e) {
             System.out.println("\n" + e.getMessage());
         }
@@ -172,17 +172,17 @@ public class MenuConsola {
      */
     private void mostrarEspaciosDisponibles() {
         System.out.println("\n" + "=".repeat(50));
-        System.out.println(" INFORMACION DE LA AGENDA");
+        System.out.println("INFORMACION DE LA AGENDA");
         System.out.println("=".repeat(50));
         System.out.println(" Contactos registrados: " + agenda.getNumeroContactos());
         System.out.println(" Capacidad total: " + agenda.getCapacidadTotal());
         System.out.println(" Espacios libres: " + agenda.huecosLibres());
 
         if (agenda.agendaLlena()) {
-            System.out.println("⚠️  Estado: AGENDA LLENA");
+            System.out.println("Estado: AGENDA LLENA");
         } else {
             double porcentaje = (agenda.getNumeroContactos() * 100.0) / agenda.getCapacidadTotal();
-            System.out.printf("📈 Ocupacion: %.1f%%%n", porcentaje);
+            System.out.printf("Ocupacion: %.1f%%%n", porcentaje);
         }
         System.out.println("=".repeat(50));
     }
